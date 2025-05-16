@@ -9,60 +9,58 @@
 
 # Требуется предоставить три программы и для каждой график, визуально показывающий решение
 
-# import numpy as np
-# import matplotlib.pyplot as plt
-# from sklearn.svm import SVC
-# from sklearn.decomposition import PCA
-# from sklearn.cluster import KMeans
-# import seaborn as sns
+import numpy as np
+import matplotlib.pyplot as plt
+from sklearn.svm import SVC
+from sklearn.decomposition import PCA
+from sklearn.cluster import KMeans
+import seaborn as sns
+
+iris = sns.load_dataset("iris")
+data = iris[["sepal_length", "petal_length", "species"]].copy()
+mapping = {"setosa": 0, "versicolor": 1, "virginica": 2}
+data["species"] = data["species"].map(mapping)
+data_df = data[(data["species"] == 1) | (data["species"] == 2)]  
+
+X = data_df[["sepal_length", "petal_length"]].values
+y = data_df["species"].values
+
+svm = SVC(kernel='linear')
+svm.fit(X, y)
+
+x_min, x_max = X[:, 0].min() - 1, X[:, 0].max() + 1
+y_min, y_max = X[:, 1].min() - 1, X[:, 1].max() + 1
+xx, yy = np.meshgrid(np.linspace(x_min, x_max, 500), np.linspace(y_min, y_max, 500))
+Z = svm.predict(np.c_[xx.ravel(), yy.ravel()]).reshape(xx.shape)
+
+plt.contourf(xx, yy, Z, alpha=0.3)
+plt.scatter(X[:, 0], X[:, 1], c=y)
+plt.show()
 
 
-# iris = sns.load_dataset("iris")
-# data = iris[["sepal_length", "petal_length", "species"]].copy()
-# mapping = {"setosa": 0, "versicolor": 1, "virginica": 2}
-# data["species"] = data["species"].map(mapping)
-# data_df = data[(data["species"] == 1) | (data["species"] == 2)]  
+pca = PCA(n_components=2)
+X_pca = pca.fit_transform(X)
 
-# X = data_df[["sepal_length", "petal_length"]].values
-# y = data_df["species"].values
+svm_pca = SVC(kernel='linear')
+svm_pca.fit(X_pca, y)
 
-# svm = SVC(kernel='linear')
-# svm.fit(X, y)
+Z = svm_pca.predict(np.c_[xx.ravel(), yy.ravel()]).reshape(xx.shape)
 
-# x_min, x_max = X[:, 0].min() - 1, X[:, 0].max() + 1
-# y_min, y_max = X[:, 1].min() - 1, X[:, 1].max() + 1
-# xx, yy = np.meshgrid(np.linspace(x_min, x_max, 500), np.linspace(y_min, y_max, 500))
-# Z = svm.predict(np.c_[xx.ravel(), yy.ravel()]).reshape(xx.shape)
-
-# plt.contourf(xx, yy, Z, alpha=0.8)
-# plt.scatter(X[:, 0], X[:, 1], c=y)
-# plt.show()
+plt.contourf(xx, yy, Z, alpha=0.3)
+plt.scatter(X[:, 0], X[:, 1], c=y)
+plt.show()
 
 
-# pca = PCA(n_components=2)
-# X_pca = pca.fit_transform(X)
+kmeans = KMeans(n_clusters=2)
+kmeans.fit(X)
 
-# svm_pca = SVC(kernel='linear')
-# svm_pca.fit(X_pca, y)
+Z = kmeans.predict(np.c_[xx.ravel(), yy.ravel()]).reshape(xx.shape)
 
-# xx_pca, yy_pca = np.meshgrid(np.linspace(X_pca[:, 0].min()-1, X_pca[:, 0].max()+1, 500),
-#                      np.linspace(X_pca[:, 1].min()-1, X_pca[:, 1].max()+1, 500))
-# Z_pca = svm_pca.predict(np.c_[xx_pca.ravel(), yy_pca.ravel()]).reshape(xx_pca.shape)
-
-# plt.contourf(xx_pca, yy_pca, Z_pca, alpha=0.8)
-# plt.scatter(X_pca[:, 0], X_pca[:, 1], c=y)
-# plt.show()
+plt.contourf(xx, yy, Z, alpha=0.3)
+plt.scatter(X[:, 0], X[:, 1], c=y)
+plt.show()
 
 
-
-# kmeans = KMeans(n_clusters=2, random_state=42)
-# kmeans.fit(X)
-# labels = kmeans.labels_
-
-# plt.scatter(X[:, 0], X[:, 1], c=labels)
-# plt.scatter(kmeans.cluster_centers_[:, 0], kmeans.cluster_centers_[:, 1], 
-#             s=300, c='red', marker='o')
-# plt.show()
 
 ### ЗАДАЧА НА ПРАКТИКУ № 2 (со звездочкой)
 # Написать нейросеть, которая будет складывать два небольших числа (от 0 до 10)
