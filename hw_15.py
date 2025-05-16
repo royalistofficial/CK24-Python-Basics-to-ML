@@ -65,48 +65,48 @@ plt.show()
 ### ЗАДАЧА НА ПРАКТИКУ № 2 (со звездочкой)
 # Написать нейросеть, которая будет складывать два небольших числа (от 0 до 10)
 
-# import numpy as np
-# from tensorflow import keras
-# from tensorflow.keras import layers
+import numpy as np
+from tensorflow import keras
+from tensorflow.keras import layers
 
-# X = []
-# y = []
-# for a in range(11):
-#     for b in range(11):
-#         X.append([a, b])
-#         y.append(a + b)
-# X = np.array(X, dtype=float)
-# y = np.array(y, dtype=float)
+X = []
+y = []
+for a in range(11):
+    for b in range(11):
+        X.append([a, b])
+        y.append(a + b)
+X = np.array(X, dtype=float)
+y = np.array(y, dtype=float)
 
-# indices = np.arange(len(X))
-# np.random.shuffle(indices)
-# X = X[indices]
-# y = y[indices]
+indices = np.arange(len(X))
+np.random.shuffle(indices)
+X = X[indices]
+y = y[indices]
 
-# split = int(0.8 * len(X))
-# X_train, X_test = X[:split], X[split:]
-# y_train, y_test = y[:split], y[split:]
+split = int(0.8 * len(X))
+X_train, X_test = X[:split], X[split:]
+y_train, y_test = y[:split], y[split:]
 
-# model = keras.Sequential([
-#     layers.Dense(16, activation='relu', input_shape=(2,)),
-#     layers.Dense(16, activation='relu'),
-#     layers.Dense(1)
-# ])
-# optimizer = keras.optimizers.Adam(learning_rate=1e-3)
-# model.compile(optimizer=optimizer, loss='mse', metrics=['mae'])
-# model.summary()
+model = keras.Sequential([
+    layers.Dense(16, activation='relu', input_shape=(2,)),
+    layers.Dense(16, activation='relu'),
+    layers.Dense(1)
+])
+optimizer = keras.optimizers.Adam(learning_rate=1e-3)
+model.compile(optimizer=optimizer, loss='mse', metrics=['mae'])
+model.summary()
 
-# history = model.fit(
-#     X_train, y_train,
-#     epochs=1000,
-#     batch_size=16,
-#     validation_split=0.1,
-#     verbose=0
-# )
+history = model.fit(
+    X_train, y_train,
+    epochs=1000,
+    batch_size=16,
+    validation_split=0.1,
+    verbose=0
+)
 
-# loss, mae = model.evaluate(X_test, y_test, verbose=0)
-# print(f"loss: {loss:.4f}, mae: {mae:.4f}")
+loss, mae = model.evaluate(X_test, y_test, verbose=0)
+print(f"loss: {loss:.4f}, mae: {mae:.4f}")
 
-# for pair in [[3, 5], [10, 2], [7, 8]]:
-#     pred = model.predict(np.array([pair], dtype=float))[0][0]
-#     print(f"{pair[0]} + {pair[1]} = {pred:.2f}")
+for pair in [[3, 5], [10, 2], [7, 8]]:
+    pred = model.predict(np.array([pair], dtype=float))[0][0]
+    print(f"{pair[0]} + {pair[1]} = {pred:.2f}")
